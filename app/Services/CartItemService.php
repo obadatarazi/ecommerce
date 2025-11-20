@@ -56,13 +56,14 @@ public function deleteItems($cartId, array $ids)
             'missing_ids' => array_values($missing)
         ];
     }
-
+    else{
     // كل شيء موجود → نحذف
     CartItem::where('cart_id', $cartId)
         ->whereIn('id', $ids)
         ->delete();
 
     return ['message' => 'Selected items deleted'];
+}
 }
 
 
