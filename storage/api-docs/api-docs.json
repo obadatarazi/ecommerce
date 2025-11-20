@@ -4205,7 +4205,7 @@
                 ],
                 "summary": "Delete one, multiple, or all cart items",
                 "description": "Delete cart items",
-                "operationId": "233ec44a2f02b6d37d06c33fe9fda779",
+                "operationId": "d8a4aaf6f9ad9ffe4cf6f7d888f63e0e",
                 "requestBody": {
                     "content": {
                         "application/json": {

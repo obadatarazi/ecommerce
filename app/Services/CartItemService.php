@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\CartItem;
+use Illuminate\Support\Arr;
+
 
 
 class CartItemService extends BaseService
@@ -25,21 +27,45 @@ class CartItemService extends BaseService
         return $cartItem;
     }
 
-public function deleteItems($cartId, array $input)
+
+public function deleteItems($cartId, array $ids)
 {
-    
-    if (in_array(0, $input, true)) {
+    // تحويل كل العناصر لأرقام
+    $ids = Arr::flatten($ids);
+
+    // حالة حذف كل شيء
+    if ($ids === [0]) {
         CartItem::where('cart_id', $cartId)->delete();
         return ['message' => 'All items deleted'];
     }
 
-    foreach ($input as $id) {
-        CartItem::where('cart_id', $cartId)
-            ->where('id', $id)
-            ->delete();
+    // جلب الموجود فعلياً من الـ IDs
+    $existing = CartItem::where('cart_id', $cartId)
+        ->whereIn('id', $ids)
+        ->pluck('id')
+        ->toArray();
+
+    // تحديد المفقود
+    $missing = array_diff($ids, $existing);
+
+    // لو في مفقود → لا نحذف شيء
+    if (!empty($missing)) {
+        return [
+            'success' => false,
+            'message' => 'Some items not found in your cart',
+            'missing_ids' => array_values($missing)
+        ];
     }
+
+    // كل شيء موجود → نحذف
+    CartItem::where('cart_id', $cartId)
+        ->whereIn('id', $ids)
+        ->delete();
+
     return ['message' => 'Selected items deleted'];
 }
+
+
 
 
 

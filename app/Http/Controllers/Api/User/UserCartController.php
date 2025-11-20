@@ -265,8 +265,8 @@ public function addItemsToCart(CartRequest $request)
         $userId = auth()->user()->id;
         $cart = $this->service->getFindByColumn('user_id', $userId);
         $cartId=$cart->id;
-        $result = $this->cartItemService->deleteItems($cartId,$request->validated());
-
+        $input=$request->validated();
+        $result = $this->cartItemService->deleteItems($cartId,$input);
         return response()->json($result);
     }
 
