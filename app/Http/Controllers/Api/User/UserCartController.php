@@ -259,7 +259,6 @@ public function addItemsToCart(CartRequest $request)
     #[OA\Response(
         response: 404,
         description: 'Cart not found'
-        
     )]
     public function destroy(CartRequest $request): JsonResponse
     {
